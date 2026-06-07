@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>麦克风改色定制工坊</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#6366f1',
+                        secondary: '#ec4899',
+                        dark: '#0f172a',
+                        light: '#f8fafc'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .color-option {
+                @apply w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:scale-110 transition-all duration-200 shadow-md;
+            }
+            .color-option.active {
+                @apply border-white ring-2 ring-primary ring-offset-2;
+            }
+            .custom-range {
+                @apply w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-primary;
+            }
+            .btn {
+                @apply px-6 py-3 rounded-lg font-medium transition-all duration-300 shadow-md hover:shadow-lg active:scale-95;
+            }
+            .btn-primary {
+                @apply bg-primary text-white hover:bg-primary/90;
+            }
+            .btn-secondary {
+                @apply bg-white text-dark border border-gray-200 hover:bg-gray-50;
+            }
+            .preview-container {
+                @apply relative w-full aspect-square max-w-md mx-auto bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl shadow-lg overflow-hidden flex items-center justify-center;
+            }
+        }
+    </style>
+    <style>
+        .mic-body { mix-blend-mode: multiply; opacity: 0.92; }
+    </style>
+</head>
+<body class="font-inter bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 min-h-screen text-white">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="text-center mb-8">
+            <h1 class="text-[clamp(1.8rem,4vw,2.8rem)] font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+                🎤 麦克风改色定制工坊
+            </h1>
+            <p class="text-gray-300 max-w-xl mx-auto">自由选色，打造专属麦克风，实时预览一键保存</p>
+        </header>
+
+        <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div class="preview-container">
+                <div class="relative w-full h-full flex items-center justify-center">
+                    <div id="micColorLayer" class="mic-body absolute inset-0">
+                        <img id="micColored" src="https://johnnyks0526.github.io/mic-colour-custom/0D9EDE6D-89C9-4730-B7D2-6C396BCCC830.png" alt="麦克风" class="w-full h-full object-contain" style="filter: hue-rotate(270deg) saturate(100%) brightness(100%);">
+                    </div>
+                    <img id="defaultMic" src="https://johnnyks0526.github.io/mic-colour-custom/0D9EDE6D-89C9-4730-B7D2-6C396BCCC830.png" alt="麦克风原图" class="w-full h-full object-contain" style="mix-blend-mode: screen;">
+                </div>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-6 shadow-xl border border-white/20">
+                <h2 class="text-xl font-semibold mb-5 flex items-center gap-2">
+                    <i class="fa fa-palette text-primary"></i> 改色控制面板
+                </h2>
+
+                <div class="mb-6">
+                    <h3 class="text-sm font-medium text-gray-300 mb-3">🎨 预设颜色</h3>
+                    <div class="grid grid-cols-6 gap-3">
+                        <div class="color-option active" data-hue="270" style="background: #9d4edd;" title="梦幻紫"></div>
+                        <div class="color-option" data-hue="0" style="background: #e63946;" title="经典红"></div>
+                        <div class="color-option" data-hue="210" style="background: #1d4ed8;" title="科技蓝"></div>
+                        <div class="color-option" data-hue="140" style="background: #22c55e;" title="活力绿"></div>
+                        <div class="color-option" data-hue="45" style="background: #eab308;" title="奢华金"></div>
+                        <div class="color-option" data-hue="320" style="background: #ec4899;" title="玫瑰粉"></div>
+                        <div class="color-option" data-hue="180" style="background: #06b6d4;" title="冰蓝"></div>
+                        <div class="color-option" data-hue="30" style="background: #f97316;" title="活力橙"></div>
+                        <div class="color-option" data-hue="0" data-sat="0" style="background: #f1f5f9;" title="珍珠白"></div>
+                        <div class="color-option" data-hue="0" data-sat="0" data-brightness="25" style="background: #0f172a;" title="哑光黑"></div>
+                        <div class="color-option" data-hue="285" style="background: #a855f7;" title="紫罗兰"></div>
+                        <div class="color-option" data-hue="195" style="background: #0ea5e9;" title="天空蓝"></div>
+                    </div>
+                </div>
+
+                <div class="space-y-5 mb-6">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-medium text-gray-300">🌈 色相</label>
+                            <span id="hueValue" class="text-xs bg-white/20 px-2 py-1 rounded">270°</span>
+                        </div>
+                        <input type="range" min="0" max="360" value="270" class="custom-range" id="hueSlider">
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-medium text-gray-300">✨ 饱和度</label>
+                            <span id="satValue" class="text-xs bg-white/20 px-2 py-1 rounded">100%</span>
+                        </div>
+                        <input type="range" min="0" max="220" value="100" class="custom-range" id="satSlider">
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-sm font-medium text-gray-300">💡 亮度</label>
+                            <span id="brightValue" class="text-xs bg-white/20 px-2 py-1 rounded">100%</span>
+                        </div>
+                        <input type="range" min="20" max="180" value="100" class="custom-range" id="brightSlider">
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <label class="text-sm font-medium text-gray-300 mb-2 block">🎯 精准取色</label>
+                    <input type="color" id="colorPicker" value="#9d4edd" class="w-full h-12 rounded-lg cursor-pointer border-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <button id="resetBtn" class="btn btn-secondary">
+                        <i class="fa fa-refresh mr-2"></i> 重置
+                    </button>
+                    <button id="saveBtn" class="btn btn-primary">
+                        <i class="fa fa-download mr-2"></i> 保存图片
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="mt-12 text-center text-gray-400 text-sm">
+            <p>© 麦克风改色定制工坊 | 一键生成专属配色</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script>
+        const micColored = document.getElementById('micColored');
+        const hueSlider = document.getElementById('hueSlider');
+        const satSlider = document.getElementById('satSlider');
+        const brightSlider = document.getElementById('brightSlider');
+        const hueValue = document.getElementById('hueValue');
+        const satValue = document.getElementById('satValue');
+        const brightValue = document.getElementById('brightValue');
+        const colorPicker = document.getElementById('colorPicker');
+        const colorOptions = document.querySelectorAll('.color-option');
+        const resetBtn = document.getElementById('resetBtn');
+        const saveBtn = document.getElementById('saveBtn');
+
+        let currentHue = 270, currentSat = 100, currentBright = 100;
+
+        function updateMicColor() {
+            micColored.style.filter = `hue-rotate(${currentHue}deg) saturate(${currentSat}%) brightness(${currentBright}%)`;
+            hueValue.textContent = `${currentHue}°`;
+            satValue.textContent = `${currentSat}%`;
+            brightValue.textContent = `${currentBright}%`;
+            colorOptions.forEach(opt => opt.classList.remove('active'));
+        }
+
+        hueSlider.addEventListener('input', e => {
+            currentHue = +e.target.value;
+            updateMicColor();
+        });
+        satSlider.addEventListener('input', e => {
+            currentSat = +e.target.value;
+            updateMicColor();
+        });
+        brightSlider.addEventListener('input', e => {
+            currentBright = +e.target.value;
+            updateMicColor();
+        });
+
+        colorOptions.forEach(opt => {
+            opt.addEventListener('click', () => {
+                colorOptions.forEach(o => o.classList.remove('active'));
+                opt.classList.add('active');
+                currentHue = +opt.dataset.hue || 0;
+                currentSat = +opt.dataset.sat || 100;
+                currentBright = +opt.dataset.brightness || 100;
+                hueSlider.value = currentHue;
+                satSlider.value = currentSat;
+                brightSlider.value = currentBright;
+                colorPicker.value = opt.style.backgroundColor;
+                updateMicColor();
+            });
+        });
+
+        colorPicker.addEventListener('input', e => {
+            const hex = e.target.value;
+            const rgb = hexToRgb(hex);
+            const hsl = rgbToHsl(rgb.r, rgb.g, rgb.b);
+            currentHue = Math.round(hsl.h);
+            currentSat = Math.round(hsl.s * 100);
+            currentBright = Math.round(hsl.l * 100);
+            hueSlider.value = currentHue;
+            satSlider.value = currentSat;
+            brightSlider.value = currentBright;
+            updateMicColor();
+        });
+
+        resetBtn.addEventListener('click', () => {
+            currentHue = 270; currentSat = 100; currentBright = 100;
+            hueSlider.value = 270; satSlider.value = 100; brightSlider.value = 100;
+            colorPicker.value = '#9d4edd';
+            colorOptions.forEach(o => o.classList.remove('active'));
+            colorOptions[0].classList.add('active');
+            updateMicColor();
+        });
+
+        saveBtn.addEventListener('click', async () => {
+            const previewEl = document.querySelector('.preview-container');
+            saveBtn.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 生成中...';
+            try {
+                const canvas = await html2canvas(previewEl, { useCORS: true, backgroundColor: null, scale: 3 });
+                const link = document.createElement('a');
+                link.download = `麦克风定制_${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                saveBtn.innerHTML = '<i class="fa fa-check mr-2"></i> 保存成功';
+                setTimeout(() => saveBtn.innerHTML = '<i class="fa fa-download mr-2"></i> 保存图片', 2000);
+            } catch (err) {
+                saveBtn.innerHTML = '<i class="fa fa-exclamation-triangle mr-2"></i> 保存失败';
+                setTimeout(() => saveBtn.innerHTML = '<i class="fa fa-download mr-2"></i> 保存图片', 2000);
+            }
+        });
+
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? { r: parseInt(result[1],16), g: parseInt(result[2],16), b: parseInt(result[3],16) } : {r:0,g:0,b:0};
+        }
+        function rgbToHsl(r, g, b) {
+            r /=255; g/=255; b/=255;
+            const max = Math.max(r,g,b), min = Math.min(r,g,b);
+            let h, s, l = (max+min)/2;
+            if(max === min) { h=s=0; }
+            else {
+                const d = max-min;
+                s = l>0.5 ? d/(2-max-min) : d/(max+min);
+                switch(max) {
+                    case r: h = (g-b)/d + (g<b?6:0); break;
+                    case g: h = (b-r)/d + 2; break;
+                    case b: h = (r-g)/d +4; break;
+                }
+                h /=6;
+            }
+            return {h:h*360, s, l};
+        }
+    </script>
+</body>
+</html>
